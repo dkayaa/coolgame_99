@@ -1,0 +1,69 @@
+#ifndef GAMEENTITY_H
+#define GAMEENTITY_H
+
+#include "../PEngine/BodyTwo.h"
+#include <atomic>
+
+namespace PEngine
+{
+    class VectorTwo;
+}
+
+namespace WorldObjects
+{
+    enum OccupancyState
+    {
+        NONE,
+        ENEMY,
+        PLAYER,
+        BOTH
+    };
+
+    class GameEntity : public PEngine::BodyTwo
+    {
+    private:
+        static inline std::atomic<int> next_id_ = 0;
+        int id_;
+
+        GameEntity **fixed_neighbours_ = nullptr;
+        int max_fixed_neighbours_ = 8;
+        int fixed_neighbours_index_ = 0;
+
+        GameEntity **variable_neighbours_ = nullptr;
+        int max_variable_neighbours_ = 99;
+        int variable_neighbours_index_ = 0;
+
+        GameEntity **neighbours_ = nullptr;
+        int max_neighbours_ = 9;
+        int neighbours_index_ = 0;
+
+        bool requires_neighbours_computation_ = false;
+        OccupancyState occ_state_ = WorldObjects::OccupancyState::NONE;
+
+    public:
+        GameEntity() = delete;
+        GameEntity(PEngine::VectorTwo position);
+        GameEntity(PEngine::VectorTwo position, PEngine::VectorTwo velocity, double mass, double rotation, double radius, double width, double length, PEngine::ShapeType type, bool is_static, bool is_solid);
+
+        void AddFixedNeighbour(GameEntity *n);
+        void AddVariableNeighbour(GameEntity *n);
+        int GetNumFixedNeighbours();
+        int GetNumVariableNeighbours();
+        void ClearVariableNeighbours();
+        GameEntity *GetFixedNeighbourAtIndex(int i);
+        GameEntity *GetVariableNeighbourAtIndex(int i);
+
+        void AddNeighbour(GameEntity *neighbour);
+        int GetNumNeighbours();
+        GameEntity *GetNeighbourAtIndex(int i);
+        void ClearNeighbours();
+        void SetRequiresNeighboursComp(bool val);
+
+        OccupancyState &GetState(void);
+        void SetState(OccupancyState state);
+        void Reset(void);
+        int GetID(void);
+        bool operator==(const GameEntity &other) const;
+    };
+}
+#endif
