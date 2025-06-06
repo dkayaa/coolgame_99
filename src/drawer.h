@@ -16,9 +16,17 @@ namespace WorldObjects
     class GameEntity;
 }
 
+namespace VertexTransformers
+{
+    void NoTransform(float x, float y, float *px, float *py);
+    void IsoTransform(float x, float y, float *px, float *py);
+}
+
 class Drawer
 {
 private:
+    typedef void (*VertexTransformFunc)(float, float, float *, float *);
+
     int maxObjects = 1000;
     int numObjects = 0;
     // Entity** objects;
@@ -27,6 +35,7 @@ private:
     SDL_Renderer **r;
     static Drawer *drawer;
     static std::mutex mutex;
+    static VertexTransformFunc default_transform_;
 
 protected:
     Drawer();
@@ -38,10 +47,10 @@ public:
     void initObjectArr(void);
     void clearObjects(void);
 
-    void blitPointOffsetScale(PEngine::BodyTwo *body, double xo, double yo, double s);
-    void blitCircleOffsetScale(PEngine::BodyTwo *cir, double xo, double yo, double s);
-    void blitRectOffsetScale(PEngine::BodyTwo *rect, double xo, double yo, double s);
-    void blitLineOffsetScale(PEngine::VectorTwo start, PEngine::VectorTwo end, double xo, double yo, double s);
+    void blitPointOffsetScale(PEngine::BodyTwo *body, double xo, double yo, double s, VertexTransformFunc f = default_transform_);
+    void blitCircleOffsetScale(PEngine::BodyTwo *cir, double xo, double yo, double s, VertexTransformFunc f = default_transform_);
+    void blitRectOffsetScale(PEngine::BodyTwo *rect, double xo, double yo, double s, VertexTransformFunc f = default_transform_);
+    void blitLineOffsetScale(PEngine::VectorTwo start, PEngine::VectorTwo end, double xo, double yo, double s, VertexTransformFunc f = default_transform_);
 
     void blitPoint(PEngine::BodyTwo *body);
     void blitCircle(PEngine::BodyTwo *cir);
@@ -61,7 +70,7 @@ public:
     void getRGBAFromColour(PEngine::ShapeColour colour, int *r, int *g, int *b, int *a);
 
     // helpers
-    static void DrawCircleOffsetScale(SDL_Renderer *renderer, PEngine::BodyTwo *c, double xo, double yo, double s);
+    static void DrawCircleOffsetScale(SDL_Renderer *renderer, PEngine::BodyTwo *c, double xo, double yo, double s, VertexTransformFunc f = default_transform_);
     static void DrawCircle(SDL_Renderer *renderer, PEngine::BodyTwo *c);
     static void DrawCircle(SDL_Renderer *renderer, double centreX, double centreY, double radius, int n);
 };

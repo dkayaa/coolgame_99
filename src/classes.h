@@ -41,4 +41,10 @@ namespace MapHelpers
     void BoundedBreadthFirstSearch(WorldObjects::GameEntity *start, int max_depth = 10);
 }
 
+namespace VertexTransformers
+{
+    void NoTransform(float x, float y, float *px, float *py);
+    void IsoTransform(float x, float y, float *px, float *py);
+}
+
 #endif

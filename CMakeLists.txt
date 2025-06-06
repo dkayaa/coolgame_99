@@ -28,7 +28,6 @@ link_directories(${SDL_IMAGE_LIB_DIR})
 file(GLOB_RECURSE SRC_FILES "src/*.cpp")
 
 add_executable(coolgame_99 ${SRC_FILES})
-# add_executable(coolgame_99 main.cpp draw.cpp helpers.cpp classes.cpp entity.cpp textureManager.cpp app.cpp peripherals.cpp drawer.cpp levelMap.cpp collisionManager.cpp VectorTwo.cpp BodyTwo.cpp collisions.cpp)
 
 # Link SDL3 and SDL_image libraries
 target_link_libraries(coolgame_99 PRIVATE SDL3 SDL3_image)

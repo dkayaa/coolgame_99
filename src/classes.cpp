@@ -11,6 +11,7 @@
 #include "WorldObjects/Player.h"
 #include "WorldObjects/Wall.h"
 #include "WorldObjects/Floor.h"
+#include "WorldObjects/Goal.h"
 #include "helpers.h"
 #include <algorithm>
 #include <unordered_map>
@@ -61,6 +62,10 @@ void LevelInstances::FlexLevel(int *n, int *n_enem, int *n_mt, PEngine::BodyTwo 
                 n_objects++;
                 n_objects++;
                 n_enemies++;
+                n_map_tiles++;
+                break;
+            case 'G':
+                n_objects++;
                 n_map_tiles++;
                 break;
             case ' ':
@@ -134,6 +139,15 @@ void LevelInstances::FlexLevel(int *n, int *n_enem, int *n_mt, PEngine::BodyTwo 
                 // Still need a Floor Tile under the Enemy
                 e = new WorldObjects::Floor(PEngine::VectorTwo(x_offset + j * bw, y_offset + i * bw));
                 e->setColour(PEngine::ShapeColour::BLUE);
+                e->DoComputeVerts();
+                objs[object_ind] = e;
+                map[map_ind] = e;
+                map_ind++;
+                object_ind++;
+                break;
+            case 'G':
+                e = new WorldObjects::Goal(PEngine::VectorTwo(x_offset + j * bw, y_offset + i * bw), bw);
+                e->setColour(PEngine::ShapeColour::RED);
                 e->DoComputeVerts();
                 objs[object_ind] = e;
                 map[map_ind] = e;
@@ -390,4 +404,16 @@ void MapHelpers::BoundedBreadthFirstSearch(WorldObjects::GameEntity *start, int 
             backtrack[n->GetID()] = e;
         }
     }
+}
+
+void VertexTransformers::NoTransform(float x, float y, float *px, float *py)
+{
+    *px = x;
+    *py = y;
+}
+
+void VertexTransformers::IsoTransform(float x, float y, float *px, float *py)
+{
+    *px = x - y;
+    *py = (x + y) * 0.5;
 }

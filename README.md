@@ -2,11 +2,14 @@
 Exploring Game Dev using C++ and SDL. Its a pretty basic game where players navigate a maze to find the exit, whilst avoiding enemies. 
 
 ## Building
-The project uses a cmake file. To build the project, execute the following commands from the root directory.
+The project uses a cmake file as well as SDL3 and SDL_image libraries. To build the project, first navigate to `CMakeLists.txt` and specify the absolute path to the SDL3 and SDL_image directories.
+
+Then, execute the following commands from the root directory.
 ```
 rm -rf build 
 cd build 
 cmake ..
+make
 ./coolgame_99
 ```
 ## Map Generation

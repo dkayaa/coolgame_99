@@ -13,9 +13,11 @@
 #include "WorldObjects/Floor.h"
 #include "WorldObjects/GameEntity.h"
 using namespace PEngine;
+typedef void (*VertexTransformFunc)(float, float, float *, float *);
 
 Drawer *Drawer::drawer{nullptr};
 std::mutex Drawer::mutex;
+VertexTransformFunc Drawer::default_transform_ = VertexTransformers::IsoTransform;
 
 namespace
 {
@@ -107,59 +109,64 @@ void Drawer::getRGBAFromColour(PEngine::ShapeColour colour, int *r, int *g, int 
     }
 }
 
-void Drawer::blitPointOffsetScale(PEngine::BodyTwo *body, double xo, double yo, double s)
+void Drawer::blitPointOffsetScale(PEngine::BodyTwo *body, double xo, double yo, double s, VertexTransformFunc f)
 {
     int red, green, blue, alpha;
     getRGBAFromColour(body->getColour(), &red, &green, &blue, &alpha);
     SDL_SetRenderDrawColor(*r, red, green, blue, alpha);
 
     SDL_FPoint p;
-    p.x = (body->getPos().getX()) * s + xo;
-    p.y = (body->getPos().getY()) * s + yo;
+
+    f(body->getPos().getX(), body->getPos().getY(), &p.x, &p.y);
+    p.x = (p.x) * s + xo;
+    p.y = (p.y) * s + yo;
     SDL_RenderPoint(*r, p.x, p.y);
 }
 
-void Drawer::blitRectOffsetScale(PEngine::BodyTwo *rect, double xo, double yo, double s)
+void Drawer::blitRectOffsetScale(PEngine::BodyTwo *rect, double xo, double yo, double s, VertexTransformFunc f)
 {
     int red, green, blue, alpha;
 
     // SDL rectangle, origin is the upper left vertex.
-    SDL_FRect frect = {
-        (float)((rect->getPos().getX() - rect->getW() * 0.5) * s + xo),
-        (float)((rect->getPos().getY() - rect->getL() * 0.5) * s + yo),
-        (float)(rect->getL() * s),
-        (float)(rect->getW() * s)};
+    // SDL_FRect frect = {
+    //    (float)((rect->getPos().getX() - rect->getW() * 0.5) * s + xo),
+    //    (float)((rect->getPos().getY() - rect->getL() * 0.5) * s + yo),
+    //    (float)(rect->getL() * s),
+    //    (float)(rect->getW() * s)};
 
-    getRGBAFromColour(rect->getFillColour(), &red, &green, &blue, &alpha);
-    SDL_SetRenderDrawColor(*r, red, green, blue, alpha);
-    SDL_RenderFillRect(*r, &frect);
+    // getRGBAFromColour(rect->getFillColour(), &red, &green, &blue, &alpha);
+    // SDL_SetRenderDrawColor(*r, red, green, blue, alpha);
+    // SDL_RenderFillRect(*r, &frect);
 
     getRGBAFromColour(rect->getColour(), &red, &green, &blue, &alpha);
     SDL_SetRenderDrawColor(*r, red, green, blue, alpha);
-    SDL_RenderRect(*r, &frect);
+    // SDL_RenderRect(*r, &frect);
 
-    // int n = rect->getNVert();
-    // VectorTwo *verts = rect->getCachedVerts();
+    int n = rect->getNVert();
+    VectorTwo *verts = rect->getCachedVerts();
 
-    // SDL_FPoint points[n + 1];
+    SDL_FPoint points[n + 1];
 
-    // for (int i = 0; i < n; i++)
-    //{
-    //     points[i].x = (verts[i].getX()) * s + xo;
-    //     points[i].y = (verts[i].getY()) * s + yo;
-    // }
-    // points[n].x = (verts[0].getX()) * s + xo;
-    // points[n].y = (verts[0].getY()) * s + yo;
+    for (int i = 0; i < n; i++)
+    {
+        f(verts[i].getX(), verts[i].getY(), &points[i].x, &points[i].y);
+        points[i].x = (points[i].x) * s + xo;
+        points[i].y = (points[i].y) * s + yo;
+    }
 
-    // SDL_RenderLines(*r, points, n + 1);
+    points[n].x = points[0].x;
+    points[n].y = points[0].y;
+
+    SDL_RenderLines(*r, points, n + 1);
 
     SDL_FPoint p;
-    p.x = (rect->getPos().getX()) * s + xo;
-    p.y = (rect->getPos().getY()) * s + yo;
+    f(rect->getPos().getX(), rect->getPos().getY(), &p.x, &p.y);
+    p.x = (p.x) * s + xo;
+    p.y = (p.y) * s + yo;
     SDL_RenderPoint(*r, p.x, p.y);
 }
 
-void Drawer::blitCircleOffsetScale(PEngine::BodyTwo *cir, double xo, double yo, double s)
+void Drawer::blitCircleOffsetScale(PEngine::BodyTwo *cir, double xo, double yo, double s, VertexTransformFunc f)
 {
     int red, green, blue, alpha;
     getRGBAFromColour(cir->getColour(), &red, &green, &blue, &alpha);
@@ -168,18 +175,21 @@ void Drawer::blitCircleOffsetScale(PEngine::BodyTwo *cir, double xo, double yo, 
     DrawCircleOffsetScale(*r, cir, xo, yo, s);
 
     SDL_FPoint p;
-    p.x = (cir->getPos().getX()) * s + xo;
-    p.y = (cir->getPos().getY()) * s + yo;
+    f(cir->getPos().getX(), cir->getPos().getY(), &p.x, &p.y);
+    p.x = (p.x) * s + xo;
+    p.y = (p.y) * s + yo;
     SDL_RenderPoint(*r, p.x, p.y);
 }
 
-void Drawer::blitLineOffsetScale(PEngine::VectorTwo start, PEngine::VectorTwo end, double xo, double yo, double s)
+void Drawer::blitLineOffsetScale(PEngine::VectorTwo start, PEngine::VectorTwo end, double xo, double yo, double s, VertexTransformFunc f)
 {
     float x1, y1, x2, y2;
-    x1 = (start.getX()) * s + xo;
-    y1 = (start.getY()) * s + yo;
-    x2 = (end.getX()) * s + xo;
-    y2 = (end.getY()) * s + yo;
+    f(start.getX(), start.getY(), &x1, &y1);
+    x1 = (x1)*s + xo;
+    y1 = (y1)*s + yo;
+    f(end.getX(), end.getY(), &x2, &y2);
+    x2 = (x2)*s + xo;
+    y2 = (y2)*s + yo;
     blitLine(x1, y1, x2, y2);
 }
 
@@ -313,6 +323,9 @@ void Drawer::drawObjectsOffsetScale(WorldObjects::GameEntity *entities, int n_en
         case ClassType::OGTILE:
             blitRectOffsetScale(e, xo, yo, scale);
             break;
+        case ClassType::GOAL:
+            blitRectOffsetScale(e, xo, yo, scale);
+            break;
         case ClassType::GAMEENTITY:
             blitPointOffsetScale(e, xo, yo, scale);
             break;
@@ -355,6 +368,9 @@ void Drawer::drawCachedObjectsOffsetScale(double xo, double yo, double scale)
             blitRectOffsetScale(e, xo, yo, scale);
             break;
         case ClassType::OGTILE:
+            blitRectOffsetScale(e, xo, yo, scale);
+            break;
+        case ClassType::GOAL:
             blitRectOffsetScale(e, xo, yo, scale);
             break;
         case ClassType::GAMEENTITY:
@@ -413,6 +429,9 @@ void Drawer::drawObjects(void)
         case ClassType::OGTILE:
             blitRect((e));
             break;
+        case ClassType::GOAL:
+            blitRect((e));
+            break;
         case ClassType::FLOOR:
             blitPoint((e));
             break;
@@ -447,7 +466,7 @@ void Drawer::presentScene(void)
     SDL_RenderPresent(*r);
 }
 
-void Drawer::DrawCircleOffsetScale(SDL_Renderer *renderer, PEngine::BodyTwo *c, double xo, double yo, double s)
+void Drawer::DrawCircleOffsetScale(SDL_Renderer *renderer, PEngine::BodyTwo *c, double xo, double yo, double s, VertexTransformFunc f)
 {
 
     int n = c->getNVert();
@@ -456,11 +475,12 @@ void Drawer::DrawCircleOffsetScale(SDL_Renderer *renderer, PEngine::BodyTwo *c, 
     SDL_FPoint points[n + 1];
     for (int i = 0; i < n; i++)
     {
-        points[i].x = (verts[i].getX()) * s + xo;
-        points[i].y = (verts[i].getY()) * s + yo;
+        f(verts[i].getX(), verts[i].getY(), &points[i].x, &points[i].y);
+        points[i].x = (points[i].x) * s + xo;
+        points[i].y = (points[i].y) * s + yo;
     }
-    points[n].x = (verts[0].getX()) * s + xo;
-    points[n].y = (verts[0].getY()) * s + yo;
+    points[n].x = points[0].x; //(verts[0].getX()) * s + xo;
+    points[n].y = points[0].y; // (verts[0].getY()) * s + yo;
 
     SDL_RenderLines(renderer, points, n + 1);
 }

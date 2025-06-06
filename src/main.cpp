@@ -188,7 +188,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 
     MapHelpers::BoundedBreadthFirstSearch((WorldObjects::GameEntity *)p, 5);
 
-    (*drawer).drawCachedObjectsOffsetScale(100.0, 100.0, 1.0);
+    (*drawer).drawCachedObjectsOffsetScale(600.0, 50.0, 1.0);
     //(*drawer).drawObjectsOffsetScale((WorldObjects::GameEntity *)(*app).getOGrid(), (*app).getNOGrid(), 750, 380, 0.5);
     (*drawer).presentScene();
 

@@ -26,6 +26,7 @@ namespace PEngine
         WALL,
         ENEMY,
         OGTILE,
+        GOAL,
         MISC
     };
 
@@ -99,7 +100,7 @@ namespace PEngine
         void setFillColour(ShapeColour colour);
         ShapeColour getColour();
         ShapeColour getFillColour();
-        };
+    };
 }
 
 #endif
