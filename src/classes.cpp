@@ -12,6 +12,7 @@
 #include "WorldObjects/Wall.h"
 #include "WorldObjects/Floor.h"
 #include "WorldObjects/Goal.h"
+#include "app.h"
 #include "helpers.h"
 #include <algorithm>
 #include <unordered_map>
@@ -371,9 +372,11 @@ void MapHelpers::BoundedBreadthFirstSearch(WorldObjects::GameEntity *start, int 
         // abstract this to a handler func
         if (e->getClassType() == PEngine::ClassType::ENEMY)
         {
+            auto app = App::getInstance();
             WorldObjects::GameEntity *n2 = backtrack[backtrack[e->GetID()]->GetID()];
             PEngine::VectorTwo d = PEngine::VectorTwo::Normalise(n2->getPos() - e->getPos());
-            e->setV(d * 200);
+            e->setV(d * 100);
+            (*app).cacheEntityForReset(e);
         }
         //
 

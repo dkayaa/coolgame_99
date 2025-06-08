@@ -139,6 +139,7 @@ namespace WorldObjects
     {
         (*this).SetState(WorldObjects::OccupancyState::NONE);
         (*this).ClearVariableNeighbours();
+        (*this).setV(PEngine::VectorTwo(0, 0));
     }
 
     int GameEntity::GetID(void)

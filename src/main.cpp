@@ -140,7 +140,6 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 
     for (int i = 0; i < (*app).getNObj(); i++)
     {
-        o[i]->Step(dt);
         if (o[i]->getClassType() == PEngine::ClassType::ENEMY || o[i]->getClassType() == PEngine::ClassType::PLAYER)
         {
             auto m = (*app).getMap();
@@ -153,7 +152,6 @@ SDL_AppResult SDL_AppIterate(void *appstate)
             (*app).cacheEntityForReset(e1);
             (*app).cacheEntityForReset(nt);
         }
-
         (*drawer).addObject(o[i]);
 
         //  we should set j = i + 1 for efficiency, but it screws the circle/rect collisions.
@@ -187,6 +185,11 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     }
 
     MapHelpers::BoundedBreadthFirstSearch((WorldObjects::GameEntity *)p, 5);
+
+    for (int i = 0; i < (*app).getNObj(); i++)
+    {
+        o[i]->Step(dt);
+    }
 
     (*drawer).drawCachedObjectsOffsetScale(600.0, 50.0, 1.0);
     //(*drawer).drawObjectsOffsetScale((WorldObjects::GameEntity *)(*app).getOGrid(), (*app).getNOGrid(), 750, 380, 0.5);
