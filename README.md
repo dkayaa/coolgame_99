@@ -1,6 +1,8 @@
 # coolgame_99
 Exploring Game Dev using C++ and SDL. Its a pretty basic game where players navigate a maze to find the exit, whilst avoiding enemies. 
 
+This repo is a WIP, a personal project which I work on whenever I've nothing else on.
+
 ## Building
 The project uses a cmake file as well as SDL3 and SDL_image libraries. To build the project, first navigate to `CMakeLists.txt` and specify the absolute path to the SDL3 and SDL_image directories.
 
@@ -29,3 +31,15 @@ Enemy pathfinding is acheived by executing bounded BFS from each player, to some
 
 ## Collision Detection: 
 Collision detection is employed using the Separating Axis Theorem (SAT). The game uses two basic shapes; Circles and Rectangles, and SAT is employed every frame to detect and rectify overlapping shapes.
+
+## To Do: 
+- Isometric textures instead of basic shapes.
+- Multi Player integration.
+- Fog of war. 
+- Level Completion.
+- Main menu.
+- Restart Level.
+- Enemy Status' (IDLE, CHASE, DEAD).
+- Weapons.
+- Multi Level Integration.
+

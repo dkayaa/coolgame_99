@@ -146,8 +146,6 @@ SDL_AppResult SDL_AppIterate(void *appstate)
             WorldObjects::GameEntity *e1;
             WorldObjects::GameEntity *nt;
             e1 = (WorldObjects::GameEntity *)o[i];
-            // e1->ClearNeighbours();
-            // e1->ComputeNearestTile(((WorldObjects::GameEntity **)m), 40, 15, 15);
             MapHelpers::ComputeNearestTile(e1, ((WorldObjects::GameEntity **)m), (*app).getBlockWidth(), (*app).getMapHeight(), (*app).getMapWidth(), &nt);
             (*app).cacheEntityForReset(e1);
             (*app).cacheEntityForReset(nt);
