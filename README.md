@@ -1,5 +1,5 @@
 # coolgame_99
-Exploring Game Dev using C++ and SDL. Its a pretty basic game where players navigate a maze to find the exit, whilst avoiding enemies. 
+Exploring Game Dev using C++ and SDL. The task for players is to navigate a map and find the exit, whilst avoiding enemies. The game employs bounded BFS for efficient pathing with many enemies. The map is defined by the user to flexibly design levels.
 
 This repo is a WIP, a personal project which I work on whenever I've nothing else on.
 
