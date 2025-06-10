@@ -4,7 +4,7 @@
 #include <iostream>
 #include <SDL3_image/SDL_image.h>
 #include <stdlib.h>
-// #include "defines.h"
+#include "defines.h"
 #include <mutex>
 #include <cmath>
 #include <math.h>
@@ -376,58 +376,62 @@ void Drawer::drawCachedObjectsOffsetScale(double xo, double yo, double scale)
     {
         e = objects[i];
         auto text = tm->getTexture(e->getClassType());
-        if (text != nullptr)
+        if (text != nullptr && SHOW_TEXTURES)
         {
             blitTexture(text, e, xo, yo, scale);
             // continue;
         }
-        switch (e->getClassType())
+        if (SHOW_2D)
         {
-        case ClassType::MISC:
-            blitPointOffsetScale(e, xo, yo, scale);
-            break;
-        case ClassType::CIRC:
-            blitCircleOffsetScale(e, xo, yo, scale);
-            break;
-        case ClassType::REC:
-            blitRectOffsetScale(e, xo, yo, scale);
-            break;
-        case ClassType::BODY:
-            blitPointOffsetScale(e, xo, yo, scale);
-            break;
-        case ClassType::PLAYER:
-            blitCircleOffsetScale(e, xo, yo, scale);
-            break;
-        case ClassType::ENEMY:
-            blitCircleOffsetScale(e, xo, yo, scale);
-            break;
-        case ClassType::WALL:
-            blitRectOffsetScale(e, xo, yo, scale);
-            break;
-        case ClassType::OGTILE:
-            blitRectOffsetScale(e, xo, yo, scale);
-            break;
-        case ClassType::GOAL:
-            blitRectOffsetScale(e, xo, yo, scale);
-            break;
-        case ClassType::GAMEENTITY:
-            blitPointOffsetScale(e, xo, yo, scale);
-            break;
-        case ClassType::FLOOR:
-            blitPointOffsetScale(e, xo, yo, scale);
-            break;
-        }
-        auto fe = (WorldObjects::GameEntity *)(e);
-        auto nn = (fe)->GetNumFixedNeighbours();
-        for (int i = 0; i < nn; i++)
-        {
-            blitLineOffsetScale(fe->getPos(), fe->GetFixedNeighbourAtIndex(i)->getPos(), xo, yo, scale);
-        }
 
-        nn = (fe)->GetNumVariableNeighbours();
-        for (int i = 0; i < nn; i++)
-        {
-            blitLineOffsetScale(fe->getPos(), fe->GetVariableNeighbourAtIndex(i)->getPos(), xo, yo, scale);
+            switch (e->getClassType())
+            {
+            case ClassType::MISC:
+                blitPointOffsetScale(e, xo, yo, scale);
+                break;
+            case ClassType::CIRC:
+                blitCircleOffsetScale(e, xo, yo, scale);
+                break;
+            case ClassType::REC:
+                blitRectOffsetScale(e, xo, yo, scale);
+                break;
+            case ClassType::BODY:
+                blitPointOffsetScale(e, xo, yo, scale);
+                break;
+            case ClassType::PLAYER:
+                blitCircleOffsetScale(e, xo, yo, scale);
+                break;
+            case ClassType::ENEMY:
+                blitCircleOffsetScale(e, xo, yo, scale);
+                break;
+            case ClassType::WALL:
+                blitRectOffsetScale(e, xo, yo, scale);
+                break;
+            case ClassType::OGTILE:
+                blitRectOffsetScale(e, xo, yo, scale);
+                break;
+            case ClassType::GOAL:
+                blitRectOffsetScale(e, xo, yo, scale);
+                break;
+            case ClassType::GAMEENTITY:
+                blitPointOffsetScale(e, xo, yo, scale);
+                break;
+            case ClassType::FLOOR:
+                blitPointOffsetScale(e, xo, yo, scale);
+                break;
+            }
+            auto fe = (WorldObjects::GameEntity *)(e);
+            auto nn = (fe)->GetNumFixedNeighbours();
+            for (int i = 0; i < nn; i++)
+            {
+                blitLineOffsetScale(fe->getPos(), fe->GetFixedNeighbourAtIndex(i)->getPos(), xo, yo, scale);
+            }
+
+            nn = (fe)->GetNumVariableNeighbours();
+            for (int i = 0; i < nn; i++)
+            {
+                blitLineOffsetScale(fe->getPos(), fe->GetVariableNeighbourAtIndex(i)->getPos(), xo, yo, scale);
+            }
         }
     }
 }

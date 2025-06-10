@@ -7,17 +7,14 @@
 #define MAP_OFFSET_HEIGHT WINDOW_HEIGHT / 2
 #define MAP_OFFSET_WIDTH WINDOW_WIDTH / 2
 
-// Supersede these..
-#define GRID_WIDTH 10
-#define GRID_HEIGHT 10
-
 #define TILE_WIDTH 10
 #define TILE_HEIGHT 10
 
 #define DT_THRESHOLD_DEFAULT 4 * 10000000
 
-#define CHARACTER_VELOCITY 120
-// #define MAP_RENDER_OFFSET_X       ((WINDOW_WIDTH - (TILE_WIDTH * MAP_RENDER_SIZE)) / 2)
-// #define MAP_RENDER_OFFSET_Y       425
+#define PLAYER_VELOCITY 120
+
+#define SHOW_2D 0
+#define SHOW_TEXTURES 1
 
 #endif

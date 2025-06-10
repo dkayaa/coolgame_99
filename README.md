@@ -26,6 +26,18 @@ G: Goal
 
 An indicative map file is provided in the repo. 
 
+An example map file such as : 
+```
+WWWWWWW
+WP    W
+W     W
+W  E  W
+W     W
+WWWWWWW
+```
+Would form the following map: 
+![image](./images/Example_Map.png)
+
 ## Enemy Pathfinding: 
 Enemy pathfinding is acheived by executing bounded BFS from each player, to some defined `depth`. Any enemies found within these bounds are directed to follow the path to target player. Pathfinding is executed periodically to update enemy pathing. 
 
