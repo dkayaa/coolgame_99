@@ -271,25 +271,36 @@ void Drawer::blitLines(SDL_FPoint *points, int count)
 void Drawer::blitTexture(SDL_Texture *texture, PEngine::BodyTwo *e, double xo, double yo, double s, VertexTransformFunc f)
 {
     float x1, y1;
-    float width = 80.0;
+    f((*e).getPos().getX(), (*e).getPos().getY(), &x1, &y1);
+
     float height = 20;
     if (e->getClassType() == PEngine::ClassType::WALL)
     {
         height = 60;
     }
-    f((*e).getPos().getX(), (*e).getPos().getY(), &x1, &y1);
-    x1 = (x1)*s + xo - width * 0.5;
-    y1 = (y1)*s + yo - height;
 
     SDL_FRect dest;
-
-    dest.x = x1;
-    dest.y = y1;
     SDL_GetTextureSize(texture, &dest.w, &dest.h);
 
     float asp_r = dest.w / dest.h;
-    dest.w = width;
-    dest.h = dest.w / asp_r;
+    // dest.h = dest.w / asp_r;
+    if (e->getClassType() == PEngine::ClassType::WALL || e->getClassType() == PEngine::ClassType::FLOOR || e->getClassType() == PEngine::ClassType::GOAL)
+    {
+        float width = 80.0;
+        x1 = (x1)*s + xo - width * 0.5;
+        y1 = (y1)*s + yo - height;
+        dest.x = x1;
+        dest.y = y1;
+        dest.w = width;
+        dest.h = 80; // dest.w / asp_r;
+    }
+    else if (e->getClassType() == PEngine::ClassType::PLAYER || e->getClassType() == PEngine::ClassType::ENEMY)
+    {
+        x1 = (x1)*s + xo - dest.w * 0.5;
+        y1 = (y1)*s + yo - dest.h;
+        dest.x = x1;
+        dest.y = y1;
+    }
 
     SDL_RenderTexture(*r, texture, NULL, &dest);
 }

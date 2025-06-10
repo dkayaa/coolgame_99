@@ -55,8 +55,13 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     (*app).setObjectInitFunc(LevelInstances::FlexLevel);
     //(*app).setObjectSortFunc(ObjectSorters::BasicSort);
     auto tm = TextureManager::getInstance();
-    tm->addTexture(PEngine::ClassType::FLOOR, "/Users/deniz_kaya/Projects/Git-Local/coolgame_99/assets/img/Floor/Floor.png");
-    tm->addTexture(PEngine::ClassType::WALL, "/Users/deniz_kaya/Projects/Git-Local/coolgame_99/assets/img/Wall/Wall.png");
+    tm->addTexture(PEngine::ClassType::FLOOR, "../assets/img/Floor/Floor.png");
+    tm->addTexture(PEngine::ClassType::WALL, "../assets/img/Wall/Wall.png");
+    tm->addTexture(PEngine::ClassType::GOAL, "../assets/img/Goal/Goal.png");
+
+    // TODO: Make these move.
+    tm->addTexture(PEngine::ClassType::PLAYER, "../assets/img/Player/Player_Forward_1.png");
+    tm->addTexture(PEngine::ClassType::ENEMY, "../assets/img/Enemy/Enemy_Forward_1.png");
 
     (*drawer).setMax(1000);
     (*drawer).initObjectArr();
