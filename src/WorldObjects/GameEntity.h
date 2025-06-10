@@ -3,6 +3,8 @@
 
 #include "../PEngine/BodyTwo.h"
 #include <atomic>
+#include <SDL3_image/SDL_image.h>
+#include "string"
 
 namespace PEngine
 {
@@ -39,6 +41,9 @@ namespace WorldObjects
 
         bool requires_neighbours_computation_ = false;
         OccupancyState occ_state_ = WorldObjects::OccupancyState::NONE;
+
+        bool print_texture_ = false;
+        SDL_Texture **textures_ = nullptr;
 
     public:
         GameEntity() = delete;

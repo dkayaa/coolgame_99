@@ -12,6 +12,7 @@
 #include "PEngine/BodyTwo.h"
 #include "WorldObjects/Floor.h"
 #include "WorldObjects/GameEntity.h"
+#include "textureManager.h"
 using namespace PEngine;
 typedef void (*VertexTransformFunc)(float, float, float *, float *);
 
@@ -267,17 +268,28 @@ void Drawer::blitLines(SDL_FPoint *points, int count)
     SDL_RenderLines(*r, points, count);
 }
 
-void Drawer::blitTexture(SDL_Texture *texture, float x, float y)
+void Drawer::blitTexture(SDL_Texture *texture, PEngine::BodyTwo *e, double xo, double yo, double s, VertexTransformFunc f)
 {
+    float x1, y1;
+    float width = 80.0;
+    float height = 20;
+    if (e->getClassType() == PEngine::ClassType::WALL)
+    {
+        height = 60;
+    }
+    f((*e).getPos().getX(), (*e).getPos().getY(), &x1, &y1);
+    x1 = (x1)*s + xo - width * 0.5;
+    y1 = (y1)*s + yo - height;
+
     SDL_FRect dest;
 
-    dest.x = x;
-    dest.y = y;
+    dest.x = x1;
+    dest.y = y1;
     SDL_GetTextureSize(texture, &dest.w, &dest.h);
 
-    // float asp_r = dest.w/dest.h;
-    // dest.w = 60;
-    // dest.h = dest.w/asp_r;
+    float asp_r = dest.w / dest.h;
+    dest.w = width;
+    dest.h = dest.w / asp_r;
 
     SDL_RenderTexture(*r, texture, NULL, &dest);
 }
@@ -293,7 +305,6 @@ void Drawer::addObject(PEngine::BodyTwo *e)
 void Drawer::drawObjectsOffsetScale(WorldObjects::GameEntity *entities, int n_entities, double xo, double yo, double scale)
 {
     WorldObjects::GameEntity *e;
-
     for (int i = 0; i < n_entities; i++)
     {
         e = &entities[i];
@@ -340,10 +351,17 @@ void Drawer::drawCachedObjectsOffsetScale(double xo, double yo, double scale)
 {
     PEngine::BodyTwo *e;
     qsort(objects, numObjects, sizeof(PEngine::BodyTwo *), drawComparator);
+    auto tm = TextureManager::getInstance();
 
     for (int i = 0; i < numObjects; i++)
     {
         e = objects[i];
+        auto text = tm->getTexture(e->getClassType());
+        if (text != nullptr)
+        {
+            blitTexture(text, e, xo, yo, scale);
+            // continue;
+        }
         switch (e->getClassType())
         {
         case ClassType::MISC:

@@ -54,6 +54,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     (*app).setRenderer(renderer);
     (*app).setObjectInitFunc(LevelInstances::FlexLevel);
     //(*app).setObjectSortFunc(ObjectSorters::BasicSort);
+    auto tm = TextureManager::getInstance();
+    tm->addTexture(PEngine::ClassType::FLOOR, "/Users/deniz_kaya/Projects/Git-Local/coolgame_99/assets/img/Floor/Floor.png");
+    tm->addTexture(PEngine::ClassType::WALL, "/Users/deniz_kaya/Projects/Git-Local/coolgame_99/assets/img/Wall/Wall.png");
 
     (*drawer).setMax(1000);
     (*drawer).initObjectArr();

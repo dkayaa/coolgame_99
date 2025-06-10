@@ -58,7 +58,7 @@ public:
     void blitLine(PEngine::VectorTwo start, PEngine::VectorTwo end);
     void blitLine(float x1, float y1, float x2, float y2);
     void blitLines(SDL_FPoint *points, int count);
-    void blitTexture(SDL_Texture *texture, float x, float y);
+    void blitTexture(SDL_Texture *texture, PEngine::BodyTwo *e, double xo, double yo, double s, VertexTransformFunc f = default_transform_);
     // void addObject(Entity* e);
     void addObject(PEngine::BodyTwo *o);
     void drawObjects(void);
