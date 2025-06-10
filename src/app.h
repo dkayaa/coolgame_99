@@ -3,7 +3,7 @@
 
 #include "peripherals.h"
 #include <mutex>
-#include "defines.h"
+// #include "defines.h"
 
 namespace WorldObjects
 {
@@ -64,8 +64,8 @@ private:
     int y_offset_ = 100;
     int block_width_ = 40;
     // occupancy grid.
-    WorldObjects::OGTile *occupancy_grid_ = nullptr;
-    int n_occupancy_grid_cells_ = 0;
+    // WorldObjects::OGTile *occupancy_grid_ = nullptr;
+    // int n_occupancy_grid_cells_ = 0;
 
 protected:
     App()
@@ -94,12 +94,6 @@ public:
     void setRenderer(SDL_Renderer *r);
     void setObjectInitFunc(ObjectInitFunc f);
     void init(void);
-
-    // discritisation
-    void initOG(void);
-    void populateOG(void);
-    WorldObjects::OGTile *getOGrid(void);
-    int getNOGrid(void);
 
     void cacheEntityForReset(WorldObjects::GameEntity *e);
     void resetEntities(void);

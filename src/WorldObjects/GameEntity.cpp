@@ -18,53 +18,6 @@ namespace WorldObjects
         class_type_ = PEngine::ClassType::GAMEENTITY;
         id_ = next_id_++;
     }
-    void GameEntity::AddNeighbour(GameEntity *neighbour)
-    {
-        if (neighbours_index_ >= max_neighbours_)
-        {
-            return;
-        }
-
-        if (neighbours_ == nullptr)
-        {
-            neighbours_ = (GameEntity **)malloc(sizeof(GameEntity *) * max_neighbours_);
-            neighbours_index_ = 0;
-        }
-
-        neighbours_[neighbours_index_] = neighbour;
-        neighbours_index_++;
-        return;
-    }
-
-    int GameEntity::GetNumNeighbours()
-    {
-        return neighbours_index_;
-    }
-
-    void GameEntity::SetRequiresNeighboursComp(bool val)
-    {
-        requires_neighbours_computation_ = val;
-    }
-
-    GameEntity *GameEntity::GetNeighbourAtIndex(int i)
-    {
-        if (i >= neighbours_index_)
-        {
-            return nullptr;
-        }
-        return neighbours_[i];
-    }
-
-    void GameEntity::ClearNeighbours()
-    {
-        for (int i = 0; i < neighbours_index_; i++)
-        {
-            neighbours_[i]->SetRequiresNeighboursComp(true);
-        }
-        this->SetRequiresNeighboursComp(true);
-        // free(neighbours_);
-        neighbours_index_ = 0;
-    }
 
     void GameEntity::AddFixedNeighbour(GameEntity *n)
     {
@@ -137,7 +90,6 @@ namespace WorldObjects
 
     void GameEntity::Reset(void)
     {
-        (*this).SetState(WorldObjects::OccupancyState::NONE);
         (*this).ClearVariableNeighbours();
         (*this).setV(PEngine::VectorTwo(0, 0));
     }
@@ -145,14 +97,5 @@ namespace WorldObjects
     int GameEntity::GetID(void)
     {
         return id_;
-    }
-
-    OccupancyState &GameEntity::GetState(void)
-    {
-        return occ_state_;
-    }
-    void GameEntity::SetState(OccupancyState state)
-    {
-        occ_state_ = state;
     }
 }

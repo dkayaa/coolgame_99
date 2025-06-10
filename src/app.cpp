@@ -4,11 +4,11 @@
 #include "PEngine/BodyTwo.h"
 #include "PEngine/VectorTwo.h"
 #include "WorldObjects/GameEntity.h"
-#include "WorldObjects/OGTile.h"
 #include "peripherals.h"
 #include <iostream>
 #include <cmath>
 #include "PEngine/Collisions.h"
+#include "defines.h"
 
 App *App::app{nullptr};
 std::mutex App::mutex;
@@ -97,60 +97,6 @@ void App::setObjectInitFunc(ObjectInitFunc f)
 void App::init(void)
 {
     objectInitFunc_(&n_obj_, &n_enemies_, &n_map_tiles_, &player_, &objects_, &enemies_, &map_, &map_width_, &map_height_);
-
-    // discritise grid
-    initOG();
-    populateOG();
-}
-
-void App::initOG(void)
-{
-    double resolution_ = 3.0;
-    int num_points = (map_width_ * resolution_) * (map_height_ * resolution_);
-    occupancy_grid_ = (WorldObjects::OGTile *)malloc(sizeof(WorldObjects::OGTile) * num_points);
-    int n = 0;
-    for (int i = 0; i < (map_height_ * (int)resolution_); i++)
-    {
-        for (int j = 0; j < (map_width_ * (int)resolution_); j++)
-        {
-            occupancy_grid_[i * (map_width_ * (int)resolution_) + j] = WorldObjects::OGTile(PEngine::VectorTwo(j * (block_width_ / resolution_), i * (block_width_ / resolution_)), block_width_ / resolution_);
-            occupancy_grid_[i * (map_width_ * (int)resolution_) + j].DoComputeVerts();
-            occupancy_grid_[i * (map_width_ * (int)resolution_) + j].setColour(PEngine::ShapeColour::BLUE);
-            occupancy_grid_[i * (map_width_ * (int)resolution_) + j].setFillColour(PEngine::ShapeColour::WHITE);
-            n++;
-        }
-    }
-    n_occupancy_grid_cells_ = n;
-}
-
-void App::populateOG(void)
-{
-    for (int i = 0; i < n_occupancy_grid_cells_; i++)
-    {
-
-        for (int j = 0; j < n_map_tiles_; j++)
-        {
-            if (map_[j]->getClassType() == PEngine::ClassType::WALL)
-            {
-                PEngine::VectorTwo n = PEngine::VectorTwo(0, 0);
-                double mag = 0;
-                if (PEngine::Collisions::intersectPointRect(&occupancy_grid_[i], map_[j], &n, &mag))
-                {
-                    occupancy_grid_[i].setFillColour(PEngine::ShapeColour::RED);
-                }
-            }
-        }
-    }
-}
-
-WorldObjects::OGTile *App::getOGrid(void)
-{
-    return occupancy_grid_;
-}
-
-int App::getNOGrid(void)
-{
-    return n_occupancy_grid_cells_;
 }
 
 PEngine::BodyTwo **App::getObjects(void)

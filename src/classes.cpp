@@ -121,7 +121,7 @@ void LevelInstances::FlexLevel(int *n, int *n_enem, int *n_mt, PEngine::BodyTwo 
                 objs[object_ind] = e;
                 object_ind++;
                 // Still need a Floor Tile under the Player
-                e = new WorldObjects::Floor(PEngine::VectorTwo(x_offset + j * bw, y_offset + i * bw));
+                e = new WorldObjects::Floor(PEngine::VectorTwo(x_offset + j * bw, y_offset + i * bw), bw);
                 e->setColour(PEngine::ShapeColour::BLUE);
                 e->DoComputeVerts();
                 map[map_ind] = e;
@@ -138,7 +138,7 @@ void LevelInstances::FlexLevel(int *n, int *n_enem, int *n_mt, PEngine::BodyTwo 
                 enemies[enemies_ind] = e;
                 enemies_ind++;
                 // Still need a Floor Tile under the Enemy
-                e = new WorldObjects::Floor(PEngine::VectorTwo(x_offset + j * bw, y_offset + i * bw));
+                e = new WorldObjects::Floor(PEngine::VectorTwo(x_offset + j * bw, y_offset + i * bw), bw);
                 e->setColour(PEngine::ShapeColour::BLUE);
                 e->DoComputeVerts();
                 objs[object_ind] = e;
@@ -156,7 +156,7 @@ void LevelInstances::FlexLevel(int *n, int *n_enem, int *n_mt, PEngine::BodyTwo 
                 object_ind++;
                 break;
             case ' ':
-                e = new WorldObjects::Floor(PEngine::VectorTwo(x_offset + j * bw, y_offset + i * bw));
+                e = new WorldObjects::Floor(PEngine::VectorTwo(x_offset + j * bw, y_offset + i * bw), bw);
                 e->setColour(PEngine::ShapeColour::BLUE);
                 e->DoComputeVerts();
                 objs[object_ind] = e;

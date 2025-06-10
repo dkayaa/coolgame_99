@@ -35,13 +35,6 @@ namespace WorldObjects
         int max_variable_neighbours_ = 99;
         int variable_neighbours_index_ = 0;
 
-        GameEntity **neighbours_ = nullptr;
-        int max_neighbours_ = 9;
-        int neighbours_index_ = 0;
-
-        bool requires_neighbours_computation_ = false;
-        OccupancyState occ_state_ = WorldObjects::OccupancyState::NONE;
-
         bool print_texture_ = false;
         SDL_Texture **textures_ = nullptr;
 
@@ -58,14 +51,6 @@ namespace WorldObjects
         GameEntity *GetFixedNeighbourAtIndex(int i);
         GameEntity *GetVariableNeighbourAtIndex(int i);
 
-        void AddNeighbour(GameEntity *neighbour);
-        int GetNumNeighbours();
-        GameEntity *GetNeighbourAtIndex(int i);
-        void ClearNeighbours();
-        void SetRequiresNeighboursComp(bool val);
-
-        OccupancyState &GetState(void);
-        void SetState(OccupancyState state);
         void Reset(void);
         int GetID(void);
         bool operator==(const GameEntity &other) const;

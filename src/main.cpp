@@ -12,7 +12,7 @@
 #include <SDL3/SDL_main.h>
 #include <SDL3_image/SDL_image.h>
 #include <iostream>
-// #include "defines.h"
+#include "defines.h"
 #include "classes.h"
 #include "drawer.h"
 #include "textureManager.h"

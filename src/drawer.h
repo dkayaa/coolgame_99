@@ -5,7 +5,7 @@
 #include <iostream>
 #include <SDL3_image/SDL_image.h>
 #include <stdlib.h>
-#include "defines.h"
+// #include "defines.h"
 #include "PEngine/VectorTwo.h"
 #include "PEngine/BodyTwo.h"
 

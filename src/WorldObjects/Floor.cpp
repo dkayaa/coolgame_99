@@ -6,9 +6,16 @@
 
 namespace WorldObjects
 {
-    Floor::Floor(PEngine::VectorTwo position) : GameEntity(position, PEngine::VectorTwo(0, 0), 0.0, 0.0, 0.0, 0.0, 0.0, PEngine::ShapeType::POINT, true, false)
+    Floor::Floor(PEngine::VectorTwo position) : GameEntity(position, PEngine::VectorTwo(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, PEngine::ShapeType::RECT, true, false)
     {
-        compute_vertices_function_ = ObjectVertexComputers::ComputePointVertices;
+        compute_vertices_function_ = ObjectVertexComputers::ComputeRectVertices;
         class_type_ = PEngine::ClassType::FLOOR;
+    }
+
+    Floor::Floor(PEngine::VectorTwo position, double length) : GameEntity(position, PEngine::VectorTwo(0, 0), 0.0, 0.0, 0.0, length, length, PEngine::ShapeType::RECT, true, false)
+    {
+        compute_vertices_function_ = ObjectVertexComputers::ComputeRectVertices;
+        class_type_ = PEngine::ClassType::FLOOR;
+        fill_colour_ = PEngine::ShapeColour::WHITE;
     }
 }

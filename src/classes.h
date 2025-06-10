@@ -1,8 +1,6 @@
 #ifndef CLASS_H
 #define CLASS_H
 
-#include "defines.h"
-
 class App;
 
 namespace PEngine

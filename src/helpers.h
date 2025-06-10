@@ -6,12 +6,6 @@
 #include <iostream>
 #include "PEngine/BodyTwo.h"
 
-// bool overlaps(Hitbox a, Hitbox b);
-// bool overlaps(double x1, double x2, int w1, int w2);
-// bool overlaps(Hitbox a, Hitbox b);
-// bool overlaps(double x1, double x2, int w1, int w2);
-// PhysicsVector getNextPos(PhysicsVector &p, PhysicsVector &v, PhysicsVector &a, double dt);
-
 namespace Helpers
 {
     class RandomHelper

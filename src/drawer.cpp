@@ -4,7 +4,7 @@
 #include <iostream>
 #include <SDL3_image/SDL_image.h>
 #include <stdlib.h>
-#include "defines.h"
+// #include "defines.h"
 #include <mutex>
 #include <cmath>
 #include <math.h>
@@ -29,9 +29,17 @@ namespace
 
         o1 = (PEngine::BodyTwo **)a;
         o2 = (PEngine::BodyTwo **)b;
-
         double d1 = sqrt(pow((*o1)->getPos().getX(), 2) + pow((*o1)->getPos().getY(), 2));
         double d2 = sqrt(pow((*o2)->getPos().getX(), 2) + pow((*o2)->getPos().getY(), 2));
+
+        if ((*o1)->getClassType() == PEngine::WALL || (*o1)->getClassType() == PEngine::FLOOR || (*o1)->getClassType() == PEngine::GOAL)
+        {
+            d1 = sqrt(pow((*o1)->getPos().getX() - (*o1)->getL() * 0.5, 2) + pow((*o1)->getPos().getY() - (*o1)->getW() * 0.5, 2));
+        }
+        if ((*o2)->getClassType() == PEngine::WALL || (*o2)->getClassType() == PEngine::FLOOR || (*o2)->getClassType() == PEngine::GOAL)
+        {
+            d2 = sqrt(pow((*o2)->getPos().getX() - (*o2)->getL() * 0.5, 2) + pow((*o2)->getPos().getY() - (*o2)->getW() * 0.5, 2));
+        }
 
         return (d1 - d2);
     }

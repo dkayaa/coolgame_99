@@ -13,6 +13,7 @@ namespace WorldObjects
     public:
         Floor() = delete;
         Floor(PEngine::VectorTwo position);
+        Floor(PEngine::VectorTwo position, double length);
     };
 }
 #endif
