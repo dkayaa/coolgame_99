@@ -154,21 +154,21 @@ SDL_AppResult SDL_AppIterate(void *appstate)
             WorldObjects::GameEntity *e1;
             WorldObjects::GameEntity *nt;
             e1 = (WorldObjects::GameEntity *)o[i];
-            e1->SetVisibility(1.0);
+            e1->SetVisibility(1.0f);
             MapHelpers::ComputeNearestTile(e1, ((WorldObjects::GameEntity **)m), (*app).getBlockWidth(), (*app).getMapHeight(), (*app).getMapWidth(), &nt);
-            nt->SetVisibility(1.0);
+            nt->SetVisibility(1.0f);
             (*app).cacheEntityForReset(e1);
             (*app).cacheEntityForReset(nt);
             for (int ii = 0; ii < nt->GetNumFixedNeighbours(); ii++)
             {
                 WorldObjects::GameEntity *nnt = nt->GetFixedNeighbourAtIndex(ii);
-                nnt->SetVisibility(1.0);
+                nnt->SetVisibility(1.0f);
                 (*app).cacheEntityForReset(nnt);
             }
             for (int ii = 0; ii < nt->GetNumVariableNeighbours(); ii++)
             {
                 WorldObjects::GameEntity *nnt = nt->GetVariableNeighbourAtIndex(ii);
-                nnt->SetVisibility(1.0);
+                nnt->SetVisibility(1.0f);
                 (*app).cacheEntityForReset(nnt);
             }
         }
@@ -224,7 +224,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
         o[i]->Step(dt);
     }
 
-    (*drawer).drawCachedObjectsOffsetScale(600.0, 50.0, 1.0);
+    (*drawer).drawCachedObjectsOffsetScale(600.0f, 50.0f, 1.0f);
     //(*drawer).drawObjectsOffsetScale((WorldObjects::GameEntity *)(*app).getOGrid(), (*app).getNOGrid(), 750, 380, 0.5);
     (*drawer).presentScene();
 

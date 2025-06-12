@@ -13,6 +13,8 @@
 #include "WorldObjects/Floor.h"
 #include "WorldObjects/GameEntity.h"
 #include "textureManager.h"
+#include <iostream>
+
 using namespace PEngine;
 typedef void (*VertexTransformFunc)(float, float, float *, float *);
 
@@ -310,7 +312,8 @@ void Drawer::blitTexture(SDL_Texture *texture, PEngine::BodyTwo *e, double xo, d
         dest.x = x1;
         dest.y = y1;
     }
-
+    float v = ((WorldObjects::GameEntity *)e)->GetVisibility();
+    SDL_SetTextureColorMod(texture, (int)(255 * v), (int)(255 * v), (int)(255 * v));
     SDL_RenderTexture(*r, texture, NULL, &dest);
 }
 
@@ -378,10 +381,10 @@ void Drawer::drawCachedObjectsOffsetScale(double xo, double yo, double scale)
     {
         e = objects[i];
         ge = (WorldObjects::GameEntity *)e;
-        if (ge->GetVisibility() == 0.0)
-        {
-            continue;
-        }
+        // if (ge->GetVisibility() == 0.0)
+        //{
+        //     continue;
+        // }
 
         auto text = tm->getTexture(e->getClassType());
         if (text != nullptr && SHOW_TEXTURES)

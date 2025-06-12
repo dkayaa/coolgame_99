@@ -102,7 +102,7 @@ namespace WorldObjects
     {
         (*this).ClearVariableNeighbours();
         (*this).setV(PEngine::VectorTwo(0, 0));
-        (*this).SetVisibility(0.0);
+        (*this).SetVisibility(0.0f);
     }
 
     int GameEntity::GetID(void)

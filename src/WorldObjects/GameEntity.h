@@ -31,7 +31,7 @@ namespace WorldObjects
         SDL_Texture **textures_ = nullptr;
 
     protected:
-        float visibility_ = 0.0;
+        float visibility_ = 0.0f;
 
     public:
         GameEntity() = delete;
