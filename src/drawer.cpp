@@ -276,6 +276,7 @@ void Drawer::blitLines(SDL_FPoint *points, int count)
     SDL_RenderLines(*r, points, count);
 }
 
+// TODO: This is a super ugly function and needs reworking
 void Drawer::blitTexture(SDL_Texture *texture, PEngine::BodyTwo *e, double xo, double yo, double s, VertexTransformFunc f)
 {
     float x1, y1;
@@ -369,12 +370,19 @@ void Drawer::drawObjectsOffsetScale(WorldObjects::GameEntity *entities, int n_en
 void Drawer::drawCachedObjectsOffsetScale(double xo, double yo, double scale)
 {
     PEngine::BodyTwo *e;
+    WorldObjects::GameEntity *ge;
     qsort(objects, numObjects, sizeof(PEngine::BodyTwo *), drawComparator);
     auto tm = TextureManager::getInstance();
 
     for (int i = 0; i < numObjects; i++)
     {
         e = objects[i];
+        ge = (WorldObjects::GameEntity *)e;
+        if (ge->GetVisibility() == 0.0)
+        {
+            continue;
+        }
+
         auto text = tm->getTexture(e->getClassType());
         if (text != nullptr && SHOW_TEXTURES)
         {
@@ -417,6 +425,7 @@ void Drawer::drawCachedObjectsOffsetScale(double xo, double yo, double scale)
                 blitPointOffsetScale(e, xo, yo, scale);
                 break;
             case ClassType::FLOOR:
+                // floor is a rectangle but we still blit it as a point for clarity.
                 blitPointOffsetScale(e, xo, yo, scale);
                 break;
             }

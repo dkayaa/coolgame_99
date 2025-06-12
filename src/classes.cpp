@@ -179,7 +179,7 @@ void LevelInstances::FlexLevel(int *n, int *n_enem, int *n_mt, PEngine::BodyTwo 
     // not sure if this will be necessary eventually.
     for (int i = 0; i < object_ind; i++)
     {
-        if (objs[i]->getClassType() != PEngine::ClassType::FLOOR)
+        if (objs[i]->getClassType() == PEngine::ClassType::PLAYER || objs[i]->getClassType() == PEngine::ClassType::ENEMY)
         {
             continue;
         }
@@ -195,12 +195,12 @@ void LevelInstances::FlexLevel(int *n, int *n_enem, int *n_mt, PEngine::BodyTwo 
                 continue;
             }
 
-            if (objs[j]->getClassType() != PEngine::ClassType::FLOOR)
+            if (objs[j]->getClassType() == PEngine::ClassType::PLAYER || objs[j]->getClassType() == PEngine::ClassType::ENEMY)
             {
                 continue;
             }
 
-            if (PEngine::VectorTwo::Length(objs[i]->getPos() - objs[j]->getPos()) <= 1.0 * bw)
+            if (PEngine::VectorTwo::Length(objs[i]->getPos() - objs[j]->getPos()) <= 1.5 * bw)
             {
                 ((WorldObjects::GameEntity *)objs[i])->AddFixedNeighbour(((WorldObjects::GameEntity *)objs[j]));
                 ((WorldObjects::GameEntity *)objs[j])->AddFixedNeighbour(((WorldObjects::GameEntity *)objs[i]));
@@ -373,7 +373,7 @@ void MapHelpers::BoundedBreadthFirstSearch(WorldObjects::GameEntity *start, int 
         if (e->getClassType() == PEngine::ClassType::ENEMY)
         {
             auto app = App::getInstance();
-            WorldObjects::GameEntity *n2 = backtrack[backtrack[e->GetID()]->GetID()];
+            WorldObjects::GameEntity *n2 = backtrack[backtrack[backtrack[e->GetID()]->GetID()]->GetID()];
             PEngine::VectorTwo d = PEngine::VectorTwo::Normalise(n2->getPos() - e->getPos());
             e->setV(d * 100);
             (*app).cacheEntityForReset(e);
@@ -392,6 +392,10 @@ void MapHelpers::BoundedBreadthFirstSearch(WorldObjects::GameEntity *start, int 
             {
                 continue;
             }
+            if (n->getClassType() == PEngine::ClassType::WALL)
+            {
+                continue;
+            }
             q.push({n, depth + 1});
             backtrack[n->GetID()] = e;
         }
@@ -400,6 +404,10 @@ void MapHelpers::BoundedBreadthFirstSearch(WorldObjects::GameEntity *start, int 
         {
             WorldObjects::GameEntity *n = e->GetVariableNeighbourAtIndex(i);
             if (visited.contains(n->GetID()))
+            {
+                continue;
+            }
+            if (n->getClassType() == PEngine::ClassType::WALL)
             {
                 continue;
             }

@@ -19,6 +19,16 @@ namespace WorldObjects
         id_ = next_id_++;
     }
 
+    void GameEntity::SetVisibility(float v)
+    {
+        visibility_ = v;
+    }
+
+    float GameEntity::GetVisibility(void)
+    {
+        return visibility_;
+    }
+
     void GameEntity::AddFixedNeighbour(GameEntity *n)
     {
         if (fixed_neighbours_index_ >= max_fixed_neighbours_)
@@ -92,6 +102,7 @@ namespace WorldObjects
     {
         (*this).ClearVariableNeighbours();
         (*this).setV(PEngine::VectorTwo(0, 0));
+        (*this).SetVisibility(0.0);
     }
 
     int GameEntity::GetID(void)

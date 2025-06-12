@@ -148,7 +148,32 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 
     for (int i = 0; i < (*app).getNObj(); i++)
     {
-        if (o[i]->getClassType() == PEngine::ClassType::ENEMY || o[i]->getClassType() == PEngine::ClassType::PLAYER)
+        if (o[i]->getClassType() == PEngine::ClassType::PLAYER)
+        {
+            auto m = (*app).getMap();
+            WorldObjects::GameEntity *e1;
+            WorldObjects::GameEntity *nt;
+            e1 = (WorldObjects::GameEntity *)o[i];
+            e1->SetVisibility(1.0);
+            MapHelpers::ComputeNearestTile(e1, ((WorldObjects::GameEntity **)m), (*app).getBlockWidth(), (*app).getMapHeight(), (*app).getMapWidth(), &nt);
+            nt->SetVisibility(1.0);
+            (*app).cacheEntityForReset(e1);
+            (*app).cacheEntityForReset(nt);
+            for (int ii = 0; ii < nt->GetNumFixedNeighbours(); ii++)
+            {
+                WorldObjects::GameEntity *nnt = nt->GetFixedNeighbourAtIndex(ii);
+                nnt->SetVisibility(1.0);
+                (*app).cacheEntityForReset(nnt);
+            }
+            for (int ii = 0; ii < nt->GetNumVariableNeighbours(); ii++)
+            {
+                WorldObjects::GameEntity *nnt = nt->GetVariableNeighbourAtIndex(ii);
+                nnt->SetVisibility(1.0);
+                (*app).cacheEntityForReset(nnt);
+            }
+        }
+
+        if (o[i]->getClassType() == PEngine::ClassType::ENEMY)
         {
             auto m = (*app).getMap();
             WorldObjects::GameEntity *e1;
@@ -157,7 +182,9 @@ SDL_AppResult SDL_AppIterate(void *appstate)
             MapHelpers::ComputeNearestTile(e1, ((WorldObjects::GameEntity **)m), (*app).getBlockWidth(), (*app).getMapHeight(), (*app).getMapWidth(), &nt);
             (*app).cacheEntityForReset(e1);
             (*app).cacheEntityForReset(nt);
+            e1->SetVisibility(nt->GetVisibility());
         }
+
         (*drawer).addObject(o[i]);
 
         //  we should set j = i + 1 for efficiency, but it screws the circle/rect collisions.

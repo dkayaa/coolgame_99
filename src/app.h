@@ -48,6 +48,7 @@ private:
     PEngine::BodyTwo **map_ = nullptr;
     PEngine::BodyTwo **enemies_ = nullptr;
     PEngine::BodyTwo *player_ = nullptr;
+
     int n_obj_ = 0;
     int n_enemies_ = 0;
     int n_map_tiles_ = 0;

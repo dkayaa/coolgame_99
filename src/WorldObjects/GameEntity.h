@@ -13,14 +13,6 @@ namespace PEngine
 
 namespace WorldObjects
 {
-    enum OccupancyState
-    {
-        NONE,
-        ENEMY,
-        PLAYER,
-        BOTH
-    };
-
     class GameEntity : public PEngine::BodyTwo
     {
     private:
@@ -38,6 +30,9 @@ namespace WorldObjects
         bool print_texture_ = false;
         SDL_Texture **textures_ = nullptr;
 
+    protected:
+        float visibility_ = 0.0;
+
     public:
         GameEntity() = delete;
         GameEntity(PEngine::VectorTwo position);
@@ -50,6 +45,9 @@ namespace WorldObjects
         void ClearVariableNeighbours();
         GameEntity *GetFixedNeighbourAtIndex(int i);
         GameEntity *GetVariableNeighbourAtIndex(int i);
+
+        void SetVisibility(float v);
+        float GetVisibility(void);
 
         void Reset(void);
         int GetID(void);
